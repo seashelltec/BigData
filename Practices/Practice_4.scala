@@ -49,3 +49,30 @@ def Serie3(num: Int): Int={
 }
 
 println(Serie3(8))
+//4-.
+def Serie4(num: Int): Int={
+    var a1 = 0
+    var b1 = 0
+    for(k<-0 until num){
+        b1 = b1 + a1
+        a1 = b1 - a1
+    }
+    return b1
+} 
+println(Serie4(9))
+//5-.
+def Serie5(num: Int): Int={
+    var n = 0
+    var v = 0
+    var v1 = 0
+    var v2 = 0
+    if(k<-2){
+        v = n+1
+        for(k<-2 until num){
+        v = v1(k-1)+v2(k-2)
+        }
+        return v(n)
+    }
+    return n
+}
+println(Serie5(9))
