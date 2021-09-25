@@ -17,8 +17,10 @@ df.columns
 df.printSchema()
 
 //5-.Imprime las primeras 5 columnas.
-for(row <- df.head(5)){
-    println(row)
+var cr = 0
+while(cr < 5){
+    println( df.columns(cr))
+    cr=cr+1
 }
 
 //6-.Usa describe () para aprender sobre el DataFrame.
