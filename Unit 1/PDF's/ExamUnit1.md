@@ -1,29 +1,41 @@
-## Ingeniería en sistemas computaciones
-
-### Datos masivos
-
 <p align="center">
-    <img alt="Logo" src="https://www.tijuana.tecnm.mx/wp-content/themes/tecnm/images/logo_TECT.png" width=250 height=250>
+    <img alt="Logo" src="https://www.tijuana.tecnm.mx/wp-content/uploads/2021/08/liston-de-logos-oficiales-educacion-tecnm-FEB-2021.jpg" width=850 height=250>
 </p>
 
+<H2><p align="Center">TECNOLÓGICO NACIONAL DE MÉXICO</p></H2>
 
-**Profesor**<br>
-Jose Christian Romero
+<H2><p align="Center">INSTITUTO TECNOLÓGICO DE TIJUANA</p></H2>
 
-## Unit 1 
-### Exam 1
+<H2><p align="Center">SUBDIRECCIÓN ACADÉMICA</p></H2>
 
-**Alumnos:** 
+<H2><p align="Center">DEPARTAMENTO DE SISTEMAS Y COMPUTACIÓN</p></H2>
 
-Marquez Millan Seashell Vanessa 
+<H2><p align="Center">NOMBRE DE LOS ALUMNOS: </p></H2>
 
-Galaviz Lona Oscar Eduardo
+<H2><p align="Center">GALAVIZ LONA OSCAR EDUARDO (N.CONTROL: 17212993)</p></H2>
 
+<H2><p align="Center">MARQUEZ MILLAN SEASHELL VANESSA (N.CONTROL: ) </p></H2>
 
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
+<H2><p align="Center">Carrera: Ingeniería Informática</p></H2>
 
+<H2><p align="Center">Semestre: 9no </p></H2>
 
+<H2><p align="Center">MATERIA: Datos Masivos</p></H2>
+
+<H2><p align="Center">PROFESOR: JOSE CHRISTIAN ROMERO HERNANDEZ</p></H2>
+
+<H2><p align="Center">Practica evaluatoria 1</p></H2>
+
+<H2><p align="Center">Unidad 1</p></H2>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ---
@@ -171,4 +183,39 @@ df.filter($"Close"<600).count()
 ```
   <p >
     <img alt="Evidence1" src="./../Media/Evidence_11a.png" >
+</p>
+
+**B-.**<br>
+```scala
+df.filter($"High">500).count()
+```
+<p>
+  <img alt="Evidence1" src="./../Media/">
+</p>
+
+**C-.We need to know what is the correlation of high and volumen**<br>
+```scala
+df.select(corr("High","Volume").alias("Correlacion")).show()
+
+```
+<p>
+  <img alt="Evidence1" src="./../Media/Evidence_11C">
+</p>
+
+**D-.We need to know which are the maximun for each year**<br>
+```scala
+df.groupBy(year(df("Date")).alias("Year")).max("High").sort(asc("Year")).show()
+
+```
+<p>
+  <img alt="Evidence1" src="./../Media/Evidence_11D">
+</p>
+
+**E-.This question deals with knowing the average close for each month**<br>
+```scala
+df.groupBy(month(df("Date")).alias("Month")).avg("Close").sort(asc("Month")).show()
+
+```
+<p>
+  <img alt="Evidence1" src="./../Media/Evidence_11E">
 </p>
