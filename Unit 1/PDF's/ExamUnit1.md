@@ -199,7 +199,7 @@ df.select(corr("High","Volume").alias("Correlacion")).show()
 
 ```
 <p>
-  <img alt="Evidence1" src="./../Media/Evidence_11C">
+  <img alt="Evidence1" src="./../Media/Evidence_11C.png">
 </p>
 
 **D-.We need to know which are the maximun for each year**<br>
@@ -208,7 +208,7 @@ df.groupBy(year(df("Date")).alias("Year")).max("High").sort(asc("Year")).show()
 
 ```
 <p>
-  <img alt="Evidence1" src="./../Media/Evidence_11D">
+  <img alt="Evidence1" src="./../Media/Evidence_11D.png">
 </p>
 
 **E-.This question deals with knowing the average close for each month**<br>
@@ -217,5 +217,5 @@ df.groupBy(month(df("Date")).alias("Month")).avg("Close").sort(asc("Month")).sho
 
 ```
 <p>
-  <img alt="Evidence1" src="./../Media/Evidence_11E">
+  <img alt="Evidence1" src="./../Media/Evidence_11E.png">
 </p>
