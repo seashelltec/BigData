@@ -187,7 +187,9 @@ df.filter($"Close"<600).count()
 
 **B-.**<br>
 ```scala
-df.filter($"High">500).count()
+
+val tiempo = df.filter($"High">500).count()
+val porcentaje = (tiempo*100)/1259
 ```
 <p>
   <img alt="Evidence1" src="./../Media/">
