@@ -42,7 +42,7 @@ En este documento se explicara la realizacion de la practica evaluatoria corresp
 
 Apache spark combina un sistema de computacion distribuida a traves de clusters de ordenadores mediante una manera sencilla y elegante de escribir programas, es considerado el primer software de codigo abierto permitiendo que la programacion distribuida sea accessible para los cientificos de datos 
 
-En cuanto a lo que se refiere la herramienta apache spark es util y eficiente para tareas de procesamiento masivo de datos. El entender el lengua es facil ya que tiene1 la bases de otros lenguajes para realizacion de operaciones y manipulacion de datos, ademas cuenta con la importacion de funciones que no se tengan dentro del scala.
+En cuanto a lo que se refiere la herramienta apache spark es util y eficiente para tareas de procesamiento masivo de datos. El entender el lengua es facil ya que tiene1 la bases de otros lenguajes para realizacion de operaciones y manipulacion de datos, ademas cuenta con la importacion de funciones que no se tengan dentro del scala ademas de la utilizacion de los dataframes que son archivos o contenedores de datos que nos permitira ver, leer, manipular los datos de un archivo csv, esto nos permitara realizar operaciones que nos den informacion para sacar conclusiones respecto a los datos que obtenemos.
 
 ---
 ### Desarrollo
