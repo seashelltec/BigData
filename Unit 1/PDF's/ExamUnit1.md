@@ -194,11 +194,11 @@ df.filter($"Close"<600).count()
 **B-.We need to know what is the percentage of time in this question**<br>
 ```scala
 
-val tiempo = df.filter($"High">500).count()
-val porcentaje = (tiempo*100)/1259
+val tiempo:Double = df.filter($"High">500).count()
+val porcentaje:Double = (tiempo*100)/1259
 ```
 <p>
-  <img alt="Evidence1" src="./../Media/">
+  <img alt="Evidence1" src="./../Media/Evidence_11BPNG">
 </p>
 
 **C-.We need to know what is the correlation of high and volumen**<br>
