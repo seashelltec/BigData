@@ -55,7 +55,7 @@ df.filter($"Close"<600).count()
 
 //b-.Que porcentaje del tiempo fue la columna "High" mayor que $500?
 val tiempo = df.filter($"High">500).count()
-val tiempo1 = (tiempo1*100)/1259
+val porcentaje = (tiempo*100)/1259
 //c-.Cual es la correlacion de pearson entre columna "High" y la columna "Volumen"?
 df.select(corr("High","Volume").alias("Correlacion")).show()
 //d-.Cual es el maximo de la columna "High" por año?
