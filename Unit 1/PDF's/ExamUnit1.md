@@ -191,7 +191,7 @@ df.filter($"Close"<600).count()
     <img alt="Evidence1" src="./../Media/Evidence_11a.png" >
 </p>
 
-**B-.**<br>
+**B-.We need to know what is the percentage of time in this question**<br>
 ```scala
 
 val tiempo = df.filter($"High">500).count()
