@@ -230,3 +230,13 @@ df.groupBy(month(df("Date")).alias("Month")).avg("Close").sort(asc("Month")).sho
 <p>
   <img alt="Evidence1" src="./../Media/Evidence_11E.PNG">
 </p>
+
+### Conclusion
+El manejo de datos y la interpretacion es una parte fundamental para sacar conclusiones de
+la informacion para poder tomar una descicion respecto a esa informacion proporcionada en
+la practica apredimos que al realizar las operaciones podemos darnos cuenta de que nos 
+proporciona informacion util para cada uno de las preguntas, lo mas complicado de realizar 
+seria quizas las utilimas dos pregunta ya que pedia agrupar pero no fue caso solo era cuestion
+de darle sentido a la operacion que queriamos realizar y con esto aprendimos a como manejar 
+un dataframe desde importarlo, leerlo e interpretarlo, asi como crear uno nuevo con nuevas 
+adiciones.
