@@ -81,7 +81,7 @@ df.printSchema()
 
 **3-.Names columns** <br>
 
-Only start SPARK with the comand 
+Here only we want see the column names, but we want see all columns on the DataFrame.
 ```scala 
 df.columns
 ```
@@ -98,7 +98,7 @@ For know thw schema only need the dataFrame and the next reserverd word, is for 
 df.printSchema()
 ```
   <p >
-    <img alt="Evidence1" src="./../Media/Evidence_4.png" >
+    <img alt="Evidence4" src="./../Media/Evidence_4.png" >
 </p>
 
 <br><br>
@@ -158,6 +158,9 @@ maxp.select("Date").limit(1).show()
 <br><br>
 
 **9-.Meaning Close in DataFrame** <br>
+When the price of the High column goes up it seems to be the same for the Close column only that it is
+always less than High, which means that as High
+it goes up, the most probable thing is that Close will also do it but in less quantity
 
 
 ```scala 
