@@ -32,6 +32,11 @@ var first = mensaje slice  (0,4)
 var second = mensaje slice  (9,25)
 s"$first $second"
 
+//var vs val
+//5. Cúal es la diferencia entre value (val) y una variable (var) en scala?
+
+var se puede reasignar y val no ya que es fijo.
+
 //Tuple
 
 val tuple = (2,4,5,1,2,3,3.1416,23)
