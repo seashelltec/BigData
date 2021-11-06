@@ -125,7 +125,7 @@ Select example rows to display.
 predictions.select("predictedLabel", "label", "features").show(5)
 ```
 <p>
-<img alt="Logo" src="./../Media/practice-8.PNG" >
+<img alt="Logo" src="./../Media/practice3-8.PNG" >
 </p>
 
 Select (prediction, true label) and compute test error.
@@ -145,7 +145,7 @@ val rfModel = model.stages(2).asInstanceOf[RandomForestClassificationModel]
 println(s"Learned classification forest model:\n ${rfModel.toDebugString}")
 ```
 <p>
-<img alt="Logo" src="./../Media/pratice3-10.PNG" >
+<img alt="Logo" src="./../Media/practice3-10.PNG" >
 </p>
 <p>
 <img alt="Logo" src="./../Media/practice3-11.PNG" >
