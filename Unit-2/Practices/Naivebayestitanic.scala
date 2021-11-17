@@ -6,7 +6,7 @@ import org.apache.spark.sql.SparkSession
 //Cargar datos
 val spark = SparkSession.builder().getOrCreate()
 val dat = spark.read.option("header", "true").option("inferSchema","true")csv("Titanic.csv")
-Titanic.show()
+dat.show()
 
 
 //Borrar columnas innecesarias
@@ -20,7 +20,7 @@ dt.select("Survived","Pclass","Age","Fare","features").show()
 
 
 //Separar dataset
-val Array(trainingData, testData) = dt.randomSplit(Array(0.7, 0.3))
+val Array(trainingData, testData) = dt.randomSplit(Array(0.7, 0.3), seed = 1234L)
 testData
 val labelmodel = new NaiveBayes().setLabelCol("Survived").setFeaturesCol("features")
 val model = labelmodel.fit(trainingData)
