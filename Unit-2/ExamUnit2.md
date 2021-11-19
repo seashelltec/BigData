@@ -76,3 +76,8 @@
 <p>
 <img alt="Logo" src="./../Unit-2/Media/E2-5.png" >
 </p>
+
+**8**
+<p>
+<img alt="Logo" src="./../Unit-2/Media/E2_6.png" >
+</p>
