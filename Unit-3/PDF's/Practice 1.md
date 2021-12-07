@@ -37,6 +37,9 @@
 <br>
 <br>
 
+### Developement
+
+Well he first thing is to import all library we will go to use 
 
 ```scala
 //import de logisticRegression y otros
@@ -62,6 +65,7 @@ import org.apache.log4j._
 
 scala> Logger.getLogger("org").setLevel(Level.ERROR)
 ```
+After import all, we go to start a sesion in spark
 
 ```scala
 //iniciar una sesion de spark y cargar los datos e imprimir estructura
@@ -89,6 +93,7 @@ root
 
 
 ```
+This comand there are for get information about data set
 
 ```scala
 data.head(1)
@@ -109,6 +114,7 @@ scala> val firstrow = data.head(1)(0)
 firstrow: org.apache.spark.sql.Row = [68.95,35,61833.9,256.09,Cloned 5thgeneration orchestration,Wrightburgh,0,Tunisia,2016-03-27 00:53:11.0,0]
 
 ```
+Here only print a little example
 
 ```scala
 
@@ -125,6 +131,7 @@ for(ind <- Range(1, colnames.length)){
 <p>
 <img alt="Logo" src="./../Media/exampledatarow.PNG" >
 </p>
+The next thing is  to prepare the data, like normaly we prepare the data
 
 ```scala
 //// Preparar el DataFrame para Machine Learning ////
@@ -143,12 +150,14 @@ import org.apache.spark.ml.linalg.Vectors
 <img alt="Logo" src="./../Media/importandadd.PNG" >
 </p>
 
+We genere the vector assembler
 ```scala
 val assembler = (new VectorAssembler().setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male")).setOutputCol("features"))
 ```
 <p>
 <img alt="Logo" src="./../Media/vectorassembler.PNG" >
 </p>
+And here split the data, we use training and test
 
 ```scala
 // Utilice randomSplit para crear datos de train y test divididos en 70/30
@@ -158,9 +167,9 @@ val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345
 <img alt="Logo" src="./../Media/randomsplit.PNG" >
 </p>
 
+Now we need to do the pipiline configuration, and start with the model
 ```scala
 
-// Configuracion del Pipeline ///////
 
 import org.apache.spark.ml.Pipeline
 
@@ -177,6 +186,7 @@ val results = model.transform(test)
 <img alt="Logo" src="./../Media/model.PNG" >
 </p>
 
+Some times we need more librarys like this case, here to do the prediction
 ```scala
 //// Evaluacion del modelo /////////////
 
@@ -190,6 +200,8 @@ val metrics = new MulticlassMetrics(predictionAndLabels)
 <p>
 <img alt="Logo" src="./../Media/printmatrixandimport.PNG" >
 </p>
+
+And the last thing is to do the confusion matrix, is so important because to do the data more real results
 
 ```scala
 println("Confusion matrix:")
