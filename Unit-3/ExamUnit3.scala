@@ -1,4 +1,3 @@
-// The goal of this practical test is to try to group customers from specific regions of a wholesaler. This based on the sales of some product categories.
 
 // 1-. Importar una simple sesión Spark.
 import org.apache.spark.sql.SparkSession
