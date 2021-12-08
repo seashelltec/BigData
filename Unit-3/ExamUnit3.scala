@@ -21,3 +21,20 @@ val feature_data = (dataset.select($"Fresh", $"Milk", $"Grocery", $"Frozen", $"D
 // 7-. Importar Vector Assembler y Vector
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
+
+//8-.Crea un nuevo objeto Vector Assembler para las columnas de caracteristicas como un conjunto de entrada, recordando que no hay etiquetas
+val assembler = new VectorAssembler().setInputCols(Array("Fresh","Milk","Grocery","Frozen","Detergents_Paper","Delicassen")).setOutputCol("features")
+
+//9-.Utilice el objeto assembler para transformar feature_data
+val  features = assembler.transform(feature_data)
+
+//10-.Crear un modelo Kmeans con K=3
+val kmeans = new KMeans().setK(3).setSeed(1L) 
+val model = kmeans.fit(features)
+
+//11-.Evalúe los grupos utilizando Within Set Sum of Squared Errors WSSSE e imprima los centroides.
+val WSSSE = model.computeCost(features)
+println(s"Within set sum of Squared Errors = $WSSSE")
+
+println("Cluster Centers: ") 
+model.clusterCenters.foreach(println) 
