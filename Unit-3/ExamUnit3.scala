@@ -33,7 +33,7 @@ val kmeans = new KMeans().setK(3).setSeed(1L)
 val model = kmeans.fit(features)
 
 //11-.Evalúe los grupos utilizando Within Set Sum of Squared Errors WSSSE e imprima los centroides.
-val WSSSE = model.computeCost(features)
+val WSSSE = model.computeCost(features)
 println(s"Within set sum of Squared Errors = $WSSSE")
 
 println("Cluster Centers: ") 
