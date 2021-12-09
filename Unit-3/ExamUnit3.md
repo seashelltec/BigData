@@ -57,7 +57,7 @@ import org.apache.spark.ml.clustering.KMeans
 val dataset = spark.read.option("header","true").option("inferSchema","true").format("csv").load("Wholesale customers data.csv")
 ```
 <p>
-<img alt="Logo" src="./../Media/Ex3-1.PNG" >
+<img alt="Logo" src="./../Unit-3/Media/Ex3-1.PNG" >
 </p>
 
 ```scala
@@ -65,7 +65,7 @@ val dataset = spark.read.option("header","true").option("inferSchema","true").fo
 val feature_data = (dataset.select($"Fresh", $"Milk", $"Grocery", $"Frozen", $"Detergents_Paper", $"Delicassen"))
 ```
 <p>
-<img alt="Logo" src="./../Media/Ex3-2.PNG" >
+<img alt="Logo" src="./../Unit-3/Media/Ex3-2.PNG" >
 </p>
 
 ```scala
@@ -77,7 +77,7 @@ import org.apache.spark.ml.linalg.Vectors
 val assembler = new VectorAssembler().setInputCols(Array("Fresh","Milk","Grocery","Frozen","Detergents_Paper","Delicassen")).setOutputCol("features")
 ```
 <p>
-<img alt="Logo" src="./../Media/Ex3-3.PNG" >
+<img alt="Logo" src="./../Unit-3/Media/Ex3-3.PNG" >
 </p>
 
 ```scala
@@ -90,7 +90,7 @@ val model = kmeans.fit(features)
 ```
 
 <p>
-<img alt="Logo" src="./../Media/Ex3-4.PNG" >
+<img alt="Logo" src="./../Unit-3/Media/Ex3-4.PNG" >
 </p>
 
 ```scala
@@ -99,7 +99,7 @@ val WSSSE = model.computeCost(features)
 println(s"Within set sum of Squared Errors = $WSSSE")
 ```
 <p>
-<img alt="Logo" src="./../Media/Ex3-5.PNG" >
+<img alt="Logo" src="./../Unit-3/Media/Ex3-5.PNG" >
 </p>
 
 ```scala
@@ -107,5 +107,5 @@ println("Cluster Centers: ")
 model.clusterCenters.foreach(println)
 ```
 <p>
-<img alt="Logo" src="./../Media/Ex3-6.PNG" >
+<img alt="Logo" src="./../Unit-3/Media/Ex3-6.PNG" >
 </p>
