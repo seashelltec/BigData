@@ -19,8 +19,11 @@ BigData 9th
 6. :page_facing_up: [Practice 6](/Unit-2/PDF`S/Practice_6.md)
 7. :page_facing_up: [Practice 7](/Unit-2/PDF`S/Practice_7.md)
 
+#### Unit 3 
+1. :page_facing_up: [Practice 1](./unit-Unit-3/PDF's/Practice%201.md)
+
 ### Evaluation
 1. :page_facing_up: [Exam unit 1](/Unit%201/PDF's/ExamUnit1.md)
 2. :page_facing_up: [Exam unit 2](/Unit-2/ExamUnit2.md)
-   
+3. :page_facing_up: [Exam unit 3](/Unit-3/ExamUnit3.md)  
 
