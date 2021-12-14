@@ -26,14 +26,14 @@ for(ind <- Range(1, colnames.length)){
 //// Preparar el DataFrame para Machine Learning ////
 
 
-val logregdata = timedata.select(data("default").as("label"), $"age", $"job", $"marital", $"education", $"balance", $"campaign")
+val logregdata = timedata.select(data("campaign").as("label"), $"age", $"balance", $"day", $"duration")
 
 // Cree un nuevo objecto VectorAssembler llamado assembler para los feature
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
 
 //val assembler = (new VectorAssembler().setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male")).setOutputCol("features"))
-val assembler = (new VectorAssembler().setInputCols(Array("age", "job", "marital", "education", "balance", "campaign")).setOutputCol("features"))
+val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day","duration")).setOutputCol("features"))
 
 
 

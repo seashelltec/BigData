@@ -13,6 +13,13 @@ val dataframe = spark.read.option("header","true").option("inferSchema","true").
 dataframe.head()
 dataframe.describe()
 
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+
+
+val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day","duration")).setOutputCol("features"))
+val newdata = assembler.transform(dataframe)
+
 // Split the data into train and test
 val splits = data.randomSplit(Array(0.6, 0.4), seed = 1234L)
 val train = splits(0)
