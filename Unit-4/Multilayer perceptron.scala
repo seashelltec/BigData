@@ -17,7 +17,7 @@ import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
 
 
-val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day","duration")).setOutputCol("features"))
+val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day","duration","campaign","previous")).setOutputCol("features"))
 val newdata = assembler.transform(dataframe)
 
 // Split the data into train and test
