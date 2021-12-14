@@ -1,16 +1,17 @@
+//importacion de la libreria logisticRegression
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.sql.SparkSession
 
 import org.apache.log4j._
 Logger.getLogger("org").setLevel(Level.ERROR)
 
+//Creacion de una sesion de spark
 val spark = SparkSession.builder().getOrCreate()
 
+//Carga del repositorio de datos
 val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("bank.csv")
 
 data.printSchema()
-
-// Imprima un renglon de ejemplo 
 
 data.head(1)
 val colnames = data.columns
@@ -22,57 +23,57 @@ for(ind <- Range(1, colnames.length)){
     println(firstrow(ind))
     println("\n")
 }
+//Categorizacion de las variables de tipo string a variables numericas 
+val change = data.withColumn("y",when(col("y").equalTo("yes"),1).otherwise(col("y")))
+val clean = change.withColumn("y",when(col("y").equalTo("no"),2).otherwise(col("y")))
+val newdata = clean.withColumn("y",'y.cast("Int"))
 
-//// Preparar el DataFrame para Machine Learning ////
-
-
-val logregdata = timedata.select(data("campaign").as("label"), $"age", $"balance", $"day", $"duration")
-
-// Cree un nuevo objecto VectorAssembler llamado assembler para los feature
+// Creacion del vector en base a los features
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
 
-//val assembler = (new VectorAssembler().setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male")).setOutputCol("features"))
 val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day","duration")).setOutputCol("features"))
 
 
+//transformacion del dataframe con el vector
+val data2 = assembler.transform(newdata)
 
-// Utilice randomSplit para crear datos de train y test divididos en 70/30
-val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345)
+//Renombrar columnas del dataframe
+val featuresLabel = data2.withColumnRenamed("y", "label")
+
+//seleccion de las columnas principales
+val finaldata = featuresLabel.select("label","features")
+
+// division del data en training y test 70 y 30
+val Array(training, test) = finaldata.randomSplit(Array(0.7, 0.3), seed = 1234)
 
 
-// Configure un Pipeline ///////
-
-// Cree un nuevo objeto de  LogisticRegression llamado lr
-
-// Cree un nuevo  pipeline con los elementos: assembler, lr
-
-// Ajuste (fit) el pipeline para el conjunto de training.
-
-
-// Tome los Resultados en el conjuto Test con transform
+//Modelo de regresion
 
 import org.apache.spark.ml.Pipeline
 
 val lr = new LogisticRegression()
 
-val pipeline = new Pipeline().setStages(Array(assembler, lr))
-
-val model = pipeline.fit(training)
+val model = lr.fit(training)
 
 val results = model.transform(test)
 
-//// Evaluacion del modelo /////////////
+//Resultados del modelo
 
-// Convierta los resutalos de prueba (test) en RDD utilizando .as y .rdd
-// Inicialice un objeto MulticlassMetrics 
-// Imprima la  Confusion matrix
 import org.apache.spark.mllib.evaluation.MulticlassMetrics
 
+//conversion de resultados 
 val predictionAndLabels = results.select($"prediction",$"label").as[(Double, Double)].rdd
 val metrics = new MulticlassMetrics(predictionAndLabels)
 
 println("Confusion matrix:")
 println(metrics.confusionMatrix)
 
+//resultado de la presicion
 metrics.accuracy
+println(s"Accuracy=${metrics.accuracy}")
+
+//para ciclos
+for(v <- 0 to 29){
+
+}
