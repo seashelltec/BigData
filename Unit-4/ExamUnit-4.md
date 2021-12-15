@@ -55,6 +55,15 @@ In these case we used this types of models for create a comparation in this and 
   
 Start talk about the each of the models like SVM is a supervised machine learning algorithm that can be used for both classification or regression challenges. However,  it is mostly used in classification problems. In the SVM algorithm, we plot each data item as a point in n-dimensional space (where n is a number of features you have) with the value of each feature being the value of a particular coordinate. Then, we perform classification by finding the hyper-plane that differentiates the two classes very well, now let's move on to Decision three are a non-parametric supervised learning method used for classification and regression. The goal is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the data features. A tree can be seen as a piecewise constant approximation, decision trees learn from data to approximate a sine curve with a set of if-then-else decision rules. The deeper the tree, the more complex the decision rules and the fitter the model, while logistic regresion is a supervised learning classification algorithm used to predict the probability of a target variable. The nature of target or dependent variable is dichotomous, which means there would be only two possible classes so the dependent variable is binary in nature having data coded as either 1 (stands for success/yes) or 0 (stands for failure/no) and multilayer perception is a neural network where the mapping between inputs and output is non-linear, has input and output layers, and one or more hidden layers with many neurons stacked together. And while in the Perceptron the neuron must have an activation function that imposes a threshold, like ReLU or sigmoid, neurons in a Multilayer Perceptron can use any arbitrary activation function.
 
+### Implementation
+<br>
+Why we used scala and spark like work environment?
+
+Well Scala is a functional language, so computing can be distributed across the cores in a multicore server and across the servers in a Data Center. This makes Scala especially a great choice for multi-core CPUs and Cloud Coumputing distributed workloads. Learning Scala is indispensable for Big Data analysis scenarios and spark enables developers to perform operations on large volumes of data in clusters quickly and with fault tolerance. When we have to handle algorithms, working in memory and not on disk improves performance.
+
+So we decide ussed because is a so lightweight work envioment because this interfaz don't used a lot recurses and this does not go down the potential and the big power than have scala and spark and this is fantastic if work with big data because de dataset so big to do slower the recurses and the PC in general, and no it's so difficult to analizing in this type to envioroment.
+
+
 ### Developement
 
 **Common Code**
