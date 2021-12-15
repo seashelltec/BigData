@@ -11,13 +11,13 @@ Logger.getLogger("org").setLevel(Level.ERROR)
 val spark = SparkSession.builder().getOrCreate()
 
 //Carga del repositorio de datos
-val data = spark.read.option("header","true").option("inferSchema", "true").option("deimiter",";").format("csv").load("bank.csv")
+val data  = spark.read.option("header","true").option("inferSchema", "true").option("delimiter",";").format("csv").load("bank.csv")
 
 
 //Categorizacion de las variables de tipo string a variables numericas 
-val data1 = data.withColumn("y",when(col("y").equalTo("yes"),1).otherwise(col("y")))
-val data2 = data1.withColumn("y",when(col("y").equalTo("no"),2).otherwise(col("y")))
-val newdata = data2.withColumn("y",'y.cast("Int"))
+val yes = data.withColumn("y",when(col("y").equalTo("yes"),1).otherwise(col("y")))
+val clean = yes.withColumn("y",when(col("y").equalTo("no"),2).otherwise(col("y")))
+val cleanData = clean.withColumn("y",'y.cast("Int"))
 
 // Creacion del vector en base a los features
 
@@ -25,7 +25,7 @@ val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day
 
 
 //transformacion del dataframe con el vector
-val data2 = assembler.transform(newdata)
+val data2 = assembler.transform(cleanData)
 
 //Renombrar columnas del dataframe
 val featuresLabel = data2.withColumnRenamed("y", "label")
