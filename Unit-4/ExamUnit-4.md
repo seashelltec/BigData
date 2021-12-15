@@ -41,17 +41,88 @@
 
 ### Introduction 
 
-This practice is for can see the best model for this example the data set is bank.csv is a data set about  related with direct marketing campaigns (phone calls) of a Portuguese banking institution. The classification goal is to predict if the client will subscribe a term deposit (variable y) and we trai to do a prediction with teh models:
+This practice is for can see the best model for this example the data set is bank.csv is a data set about  related with direct marketing campaigns (phone calls) of a Portuguese banking institution. The classification goal is to predict if the client will subscribe a term deposit (variable y) and we try to do a prediction with teh models: SVM, Desicion tree, logistic regresion and multilayer perceptron those are machine learning models but supervised that is to say is a subcategory of machine learning and artificial intelligence. It is defined by its use of labeled datasets to train algorithms that to classify data or predict outcomes accurately. As input data is fed into the model, it adjusts its weights until the model has been fitted appropriately, which occurs as part of the cross validation process. Supervised learning helps organizations solve for a variety of real-world problems at scale, such as classifying spam in a separate folder from your inbox.
+
+In these case we used this types of models for create a comparation in this and obtaing valius information abou wich is the best in these case in spesific we based in the accuaracy and the error, and try to explain more about this models too.
 <br>
 
+**Theoretical framework**
+<br>
 - SVM
 - Decision Three
 - Logistic Regresion
 - Multilayer perceptron
-
+  
 Start talk about the each of the models like SVM is a supervised machine learning algorithm that can be used for both classification or regression challenges. However,  it is mostly used in classification problems. In the SVM algorithm, we plot each data item as a point in n-dimensional space (where n is a number of features you have) with the value of each feature being the value of a particular coordinate. Then, we perform classification by finding the hyper-plane that differentiates the two classes very well, now let's move on to Decision three are a non-parametric supervised learning method used for classification and regression. The goal is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the data features. A tree can be seen as a piecewise constant approximation, decision trees learn from data to approximate a sine curve with a set of if-then-else decision rules. The deeper the tree, the more complex the decision rules and the fitter the model, while logistic regresion is a supervised learning classification algorithm used to predict the probability of a target variable. The nature of target or dependent variable is dichotomous, which means there would be only two possible classes so the dependent variable is binary in nature having data coded as either 1 (stands for success/yes) or 0 (stands for failure/no) and multilayer perception is a neural network where the mapping between inputs and output is non-linear, has input and output layers, and one or more hidden layers with many neurons stacked together. And while in the Perceptron the neuron must have an activation function that imposes a threshold, like ReLU or sigmoid, neurons in a Multilayer Perceptron can use any arbitrary activation function.
 
 ### Developement
+
+**Common Code**
+<br>
+Every model needs certain library and is representate like here
+```scala
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.classification.LinearSVC
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
+import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.StringIndexer
+import org.apache.spark.ml.feature.VectorIndexer
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.Pipeline
+``
+
+To do more small the error 
+```sala
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+```
+
+Create a new session on spark 
+```scala
+val spark = SparkSession.builder.appName("svm").getOrCreate()
+```
+
+Load the data set correspondet 
+```scala
+val df  = spark.read.option("header","true").option("inferSchema", "true").option("delimiter",";").format("csv").load("bank-full.csv")
+df.head()
+df.describe()
+```
+
+Define the colum "Y" like index
+```scala
+val labelIndexer = new StringIndexer().setInputCol("y").setOutputCol("indexedY").fit(df)
+val indexed = labelIndexer.transform(df).drop("y").withColumnRenamed("indexedY", "label")   
+```
+
+Made the vector with the number columns in features
+```scala
+val vectorFeatures = (new VectorAssembler().setInputCols(Array("balance","day","duration","pdays","previous")).setOutputCol("features"))
+```
+
+Here transform feaure
+```scala
+val featurestrans = vectorFeatures.transform(indexed)
+```
+
+Join columns feature and label
+```scala
+val dataindexed = featureslabel.select("label","features")
+dataindexed.show()
+```
+
+Creation of labelindex and featureindex for pipeline
+```scala
+val labelindexer = new StringIndexer().setInputCol("label").setOutputCol("indexedlabel").fit(dataindexed)
+val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedfeatures").setMaxCategories(4).fit(dataindexed)
+```
+
+And training test and data 
+```scala
+val Array(training, test) = dataindexed.randomSplit(Array(0.7, 0.3), seed = 1234L)
+```
+Is importat to sai only some this steps there are used on the models, sometimes can changed.
+<br>
 
 **SVM**
 
