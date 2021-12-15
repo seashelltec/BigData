@@ -31,29 +31,28 @@ val newdata = data2.withColumn("y",'y.cast("Int"))
 
 
 //Creacion del vector para la asignacion al features
-val assembler = (new VectorAssembler().setInputCols(Array("balance", "day","duration","pdays","previous")).setOutputCol("features"))
-val newframe = assembler.transform(newdata)
+val assembler = new VectorAssembler().setInputCols(Array("balance","day","duration","pdays","previous")).setOutputCol("features")
+val newDF = assembler.transform(newdata)
 
 //Renombrar columnas del dataframe
-val featuresLabel = newframe.withColumnRenamed("y", "label")
+val featuresLabel = newDF.withColumnRenamed("y", "label")
 
 //seleccion de las columnas principales
-val finaldata = featuresLabel.select("label","features")
-
+val FD = featuresLabel.select("label","features")
 
 
 //cambio de la etiqueta principal
-val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(finaldata)
+val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(FD)
 //cambio del nombre a features
-val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(2).fit(finaldata)
+val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(2).fit(FD)
 
 // division del data en train y test
-val splits = finaldata.randomSplit(Array(0.7, 0.3), seed = 12345L)
+val splits = FD.randomSplit(Array(0.7, 0.3), seed = 1234L)
 val training = splits(0)
 val test = splits(1)
 
 //Especificacion de la red neuronal
-val layers = Array[Int](4, 5, 4, 3)
+val layers = Array[Int](5, 6, 5, 2)
 
 // creacion de los parametros del trainer
 val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234L).setMaxIter(100)
