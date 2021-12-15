@@ -380,7 +380,7 @@ val prediction = model.transform(test)
 prediction.select("prediction", "label","features").show(5)
 ```
 <p>
-<img alt="Logo" src="./../Unit-4/Media/multilayerrsult.PNG" >
+<img alt="Logo" src="./../Unit-4/Media/multilayerresult.PNG" >
 </p>
 
 for the step we show the result with obtain the accuracy 
