@@ -16,7 +16,7 @@ import org.apache.spark.sql.SparkSession
 val spark = SparkSession.builder().getOrCreate()
 
 //Load the dataset
-val dataframe = spark.read.option("header","true").option("inferSchema","true").option("delimiter",";").format("csv").load("iris.csv")
+val dataframe = spark.read.option("header","true").option("inferSchema","true").option("delimiter",";").format("csv").load("bank.csv")
 dataframe.head()
 dataframe.describe()
 
@@ -25,7 +25,7 @@ val stringindexer = new StringIndexer().setInputCol("species").setOutputCol("lab
 val df = stringindexer.fit(dataframe).transform(dataframe)
 
 //Create a vector with the select columns
-val assembler = new VectorAssembler().setInputCols(Array("sepal_length","sepal_width","petal_length","petal_width")).setOutputCol("features")
+val assembler = new VectorAssembler().setInputCols(Array("balance","day","duration","pdays","previous")).setOutputCol("features")
 val output = assembler.transform(df)
 
 //Transform features
@@ -38,10 +38,10 @@ val Array(trainingData, testData) = output.randomSplit(Array(0.7, 0.3), seed = 1
 // Training a model
 val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
 
-// Convert indexed labels back to original labels.
+// Convert indexed labels back to original labels
 val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labels)
 
-// Chain indexers and tree in a Pipeline.
+// Chain indexers and tree in a Pipeline
 val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
 
 // Training model
