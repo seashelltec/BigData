@@ -60,6 +60,7 @@ Start talk about the each of the models like SVM is a supervised machine learnin
 **Common Code**
 <br>
 Every model needs certain library and is representate like here
+
 ```scala
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.classification.LinearSVC
@@ -69,10 +70,10 @@ import org.apache.spark.ml.feature.StringIndexer
 import org.apache.spark.ml.feature.VectorIndexer
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.Pipeline
-``
+```
 
 To do more small the error 
-```sala
+```scala
 import org.apache.log4j._
 Logger.getLogger("org").setLevel(Level.ERROR)
 ```
@@ -269,3 +270,188 @@ Test Error = 0.10933129159924048
 | 30 | 0.8840 |
 
 **AVERAGE: 0.88776** 
+
+
+**Logistic Regression**
+
+In this model we start the explanation from the model since all the models are using the same data repository, in this model we start from the preparation of the vectors and the already established indexers
+```scala
+val data2 = assembler.transform(cleanData)
+
+val featuresLabel = data2.withColumnRenamed("y", "label")
+
+val finaldata = featuresLabel.select("label","features")
+```
+<br>
+we proceed to divide the dataset to calculate and implement the logistic regression model
+
+```scala
+
+val Array(training, test) = finaldata.randomSplit(Array(0.7, 0.3), seed = 1234)
+```
+
+in this part we made a implementation of the model for obtain the results over data repository
+```scala
+val lr = new LogisticRegression()
+
+val model = lr.fit(training)
+
+val results = model.transform(test)
+```
+we import the last library for the last step and obtain the most important results in this case the precision
+```scala
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
+
+val predictionAndLabels = results.select($"prediction",$"label").as[(Double, Double)].rdd
+val metrics = new MulticlassMetrics(predictionAndLabels)
+```
+
+for the last step we have to show the results of accuracy
+
+```scala
+println("Confusion matrix:")
+println(metrics.confusionMatrix)
+
+metrics.accuracy
+println(s"Accuracy=${metrics.accuracy}")
+```
+<p>
+<img alt="Logo" src="./../Unit-4/Media/logistic accuracy.PNG" >
+</p>
+
+| Iter | LogiReg | 
+| ------------- | ------------- |
+| 1  | 0.8959 |
+| 2  | 0.8959 |
+| 3  | 0.8959 |
+| 4  | 0.8959 |
+| 5  | 0.8959 |
+| 6  | 0.8959 |
+| 7  | 0.8959 |
+| 8  | 0.8959 |
+| 9  | 0.8959 |
+| 10 | 0.8959 |
+| 11 | 0.8959 |
+| 12 | 0.8959 |
+| 13 | 0.8959 |
+| 14 | 0.8959 |
+| 15 | 0.8959 |
+| 16 | 0.8959 |
+| 17 | 0.8959 |
+| 18 | 0.8959 |
+| 19 | 0.8959 |
+| 20 | 0.8959 |
+| 21 | 0.8959 |
+| 22 | 0.8959 |
+| 23 | 0.8959 |
+| 24 | 0.8959 |
+| 25 | 0.8959 |
+| 26 | 0.8959 |
+| 27 | 0.8959 |
+| 28 | 0.8959 |
+| 29 | 0.8959 |
+| 30 | 0.8959 |
+
+**AVERAGE: 0.8959** 
+
+we establish the parameters for the model and we can carry out the implementation
+```scala
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234L).setMaxIter(100)
+
+
+val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labels)
+```
+We proceed to establish the parameters within a pipeline that will be taken into account for the realization of the model, once done we implement the model in the divided dataset
+```scala
+val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, trainer, labelConverter))
+
+val model = pipeline.fit(training)
+
+val prediction = model.transform(test)
+prediction.select("prediction", "label","features").show(5)
+```
+<p>
+<img alt="Logo" src="./../Unit-4/Media/multilayerrsult.PNG" >
+</p>
+
+for the step we show the result with obtain the accuracy 
+```scala
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+
+val accuracy = evaluator.evaluate(prediction)
+```
+<p>
+<img alt="Logo" src="./../Unit-4/Media/multilayeraccuracy.PNG" >
+</p>
+
+**Multilayer Perceptron**
+| Iter | MultiPerc | 
+| ------------- | ------------- |
+| 1  | 0.8853 |
+| 2  | 0.8853 |
+| 3  | 0.8853 |
+| 4  | 0.8853 |
+| 5  | 0.8853 |
+| 6  | 0.8853 |
+| 7  | 0.8853 |
+| 8  | 0.8853 |
+| 9  | 0.8853 |
+| 10 | 0.8853 |
+| 11 | 0.8853 |
+| 12 | 0.8853 |
+| 13 | 0.8853 |
+| 14 | 0.8853 |
+| 15 | 0.8853 |
+| 16 | 0.8853 |
+| 17 | 0.8853 |
+| 18 | 0.8853 |
+| 19 | 0.8853 |
+| 20 | 0.8853 |
+| 21 | 0.8853 |
+| 22 | 0.8853 |
+| 23 | 0.8853 |
+| 24 | 0.8853 |
+| 25 | 0.8853 |
+| 26 | 0.8853 |
+| 27 | 0.8853 |
+| 28 | 0.8853 |
+| 29 | 0.8853 |
+| 30 | 0.8853 |
+
+**AVERAGE: 0.8853** 
+
+**Comparative table**
+| Iter | SVM | DescTre| LogiReg | MultiPerc| 
+| ------------- | ------------- |---------|------|--------|
+| 1  | 0.8833 | 0.8907 | 0.8959 | 0.8853 |
+| 2  | 0.8835 | 0.8951 | 0.8959 | 0.8853 |
+| 3  | 0.8877 | 0.8940 | 0.8959 | 0.8853 |
+| 4  | 0.8820 | 0.8901 | 0.8959 | 0.8853 |
+| 5  | 0.8836 | 0.8867 | 0.8959 | 0.8853 |
+| 6  | 0.8865 | 0.8809 | 0.8959 | 0.8853 |
+| 7  | 0.8846 | 0.8887 | 0.8959 | 0.8853 |
+| 8  | 0.8797 | 0.8903 | 0.8959 | 0.8853 |
+| 9  | 0.8837 | 0.8899 | 0.8959 | 0.8853 |
+| 10 | 0.8838 | 0.8804 | 0.8959 | 0.8853 |
+| 11 | 0.8799 | 0.8874 | 0.8959 | 0.8853 |
+| 12 | 0.8839 | 0.8856 | 0.8959 | 0.8853 |
+| 13 | 0.8805 | 0.8912 | 0.8959 | 0.8853 |
+| 14 | 0.8830 | 0.8903 | 0.8959 | 0.8853 |
+| 15 | 0.8818 | 0.8878 | 0.8959 | 0.8853 |
+| 16 | 0.8805 | 0.8908 | 0.8959 | 0.8853 |
+| 17 | 0.8852 | 0.8856 | 0.8959 | 0.8853 |
+| 18 | 0.8811 | 0.8889 | 0.8959 | 0.8853 |
+| 19 | 0.8836 | 0.8875 | 0.8959 | 0.8853 |
+| 20 | 0.8796 | 0.8806 | 0.8959 | 0.8853 |
+| 21 | 0.8874 | 0.8874 | 0.8959 | 0.8853 |
+| 22 | 0.8865 | 0.8803 | 0.8959 | 0.8853 |
+| 23 | 0.8819 | 0.8907 | 0.8959 | 0.8853 |
+| 24 | 0.8823 | 0.8845 | 0.8959 | 0.8853 |
+| 25 | 0.8841 | 0.8874 | 0.8959 | 0.8853 |
+| 26 | 0.8878 | 0.8899 | 0.8959 | 0.8853 |
+| 27 | 0.8793 | 0.8867 | 0.8959 | 0.8853 |
+| 28 | 0.8874 | 0.8907 | 0.8959 | 0.8853 |
+| 29 | 0.8856 | 0.8887 | 0.8959 | 0.8853 |
+| 30 | 0.8842 | 0.8840 | 0.8959 | 0.8853 |
+| AVG | 0.883466667 | 0.88776 | 0.8959 | 0.8853 |
+
