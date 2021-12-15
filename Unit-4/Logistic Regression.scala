@@ -1,5 +1,7 @@
 //importacion de la libreria logisticRegression
 import org.apache.spark.ml.classification.LogisticRegression
+import org.apache.spark.ml.feature.{VectorAssembler, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.sql.SparkSession
 
 import org.apache.log4j._
@@ -9,34 +11,21 @@ Logger.getLogger("org").setLevel(Level.ERROR)
 val spark = SparkSession.builder().getOrCreate()
 
 //Carga del repositorio de datos
-val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("bank.csv")
+val data  = spark.read.option("header","true").option("inferSchema", "true").option("delimiter",";").format("csv").load("bank.csv")
 
-data.printSchema()
 
-data.head(1)
-val colnames = data.columns
-val firstrow = data.head(1)(0)
-println("\n")
-println("Example data row")
-for(ind <- Range(1, colnames.length)){
-    println(colnames(ind))
-    println(firstrow(ind))
-    println("\n")
-}
 //Categorizacion de las variables de tipo string a variables numericas 
-val change = data.withColumn("y",when(col("y").equalTo("yes"),1).otherwise(col("y")))
-val clean = change.withColumn("y",when(col("y").equalTo("no"),2).otherwise(col("y")))
-val newdata = clean.withColumn("y",'y.cast("Int"))
+val yes = data.withColumn("y",when(col("y").equalTo("yes"),1).otherwise(col("y")))
+val clean = yes.withColumn("y",when(col("y").equalTo("no"),2).otherwise(col("y")))
+val cleanData = clean.withColumn("y",'y.cast("Int"))
 
 // Creacion del vector en base a los features
-import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.ml.linalg.Vectors
 
 val assembler = (new VectorAssembler().setInputCols(Array("age", "balance", "day","duration")).setOutputCol("features"))
 
 
 //transformacion del dataframe con el vector
-val data2 = assembler.transform(newdata)
+val data2 = assembler.transform(cleanData)
 
 //Renombrar columnas del dataframe
 val featuresLabel = data2.withColumnRenamed("y", "label")
@@ -49,8 +38,6 @@ val Array(training, test) = finaldata.randomSplit(Array(0.7, 0.3), seed = 1234)
 
 
 //Modelo de regresion
-
-import org.apache.spark.ml.Pipeline
 
 val lr = new LogisticRegression()
 

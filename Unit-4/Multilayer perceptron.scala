@@ -1,18 +1,24 @@
 //Importacion de librerias de multilayerperceptron
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.sql.types.DateType
+import org.apache.spark.ml.feature.VectorIndexer
+import org.apache.spark.ml.feature.IndexToString
+import org.apache.spark.ml.feature.StringIndexer
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.Pipeline
+import org.apache.log4j._
 
 //minimizacion de errores
-import org.apache.log4j._   
 Logger.getLogger("org").setLevel(Level.ERROR)
 
 //creacion de una sesision de spark.
-import org.apache.spark.sql.SparkSession
+
 val spark = SparkSession.builder().getOrCreate()
 
 //carga del repositorio de datos 
-val dataframe = spark.read.option("header","true").option("inferSchema","true").option("delimiter",";").format("csv").load("bank.csv")
+val data = spark.read.option("header","true").option("inferSchema","true").option("delimiter",";").format("csv").load("bank.csv")
 
 dataframe.head()
 dataframe.describe()
@@ -22,38 +28,34 @@ val data1 = data.withColumn("y",when(col("y").equalTo("yes"),1).otherwise(col("y
 val data2 = data1.withColumn("y",when(col("y").equalTo("no"),0).otherwise(col("y")))
 val newdata = data2.withColumn("y",'y.cast("Int"))
 
-import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.ml.linalg.Vectors
+
 
 //Creacion del vector para la asignacion al features
-val assembler = (new VectorAssembler().setInputCols(Array("balance", "day","duration","campaign","previous")).setOutputCol("features"))
-val newframe = assembler.transform(newdata)
+val assembler = new VectorAssembler().setInputCols(Array("balance","day","duration","pdays","previous")).setOutputCol("features")
+val newDF = assembler.transform(newdata)
 
 //Renombrar columnas del dataframe
-val featuresLabel = data2.withColumnRenamed("y", "label")
+val featuresLabel = newDF.withColumnRenamed("y", "label")
 
 //seleccion de las columnas principales
-val finaldata = featuresLabel.select("label","features")
+val FD = featuresLabel.select("label","features")
 
-import org.apache.spark.ml.feature.VectorIndexer
-import org.apache.spark.ml.feature.IndexToString
-import org.apache.spark.ml.Pipeline
 
 //cambio de la etiqueta principal
-val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(finaldata)
+val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(FD)
 //cambio del nombre a features
-val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(2).fit(finaldata)
+val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(2).fit(FD)
 
 // division del data en train y test
-val splits = c3.randomSplit(Array(0.6, 0.4), seed = 12345L)
-val train = splits(0)
+val splits = FD.randomSplit(Array(0.7, 0.3), seed = 1234L)
+val training = splits(0)
 val test = splits(1)
 
 //Especificacion de la red neuronal
-val layers = Array[Int](4, 5, 4, 3)
+val layers = Array[Int](5, 6, 5, 2)
 
 // creacion de los parametros del trainer
-val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(12345L).setMaxIter(100)
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234L).setMaxIter(100)
 
 //Conversion de retorno de label
 val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labels)
@@ -61,17 +63,19 @@ val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol(
 //encadenamiento del indexador y modelo multilayer en una pipeline
 val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, trainer, labelConverter))
 
-// modelo del train
-val model = pipeline.fit(train)
+// modelo del trainingData
+val model = pipeline.fit(training)
 
 // resultados de precision de modelo y error
-val result = model.transform(test)
-result.show(8)
-val predictionAndLabels = result.select("prediction", "label")
+val prediction = model.transform(test)
+prediction.select("prediction", "label","features").show(5)
+
 //val evaluator = new MulticlassClassificationEvaluator().setMetricName("accuracy")
 val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
 
-val accuracy = evaluator.evaluate(predictions)
+val accuracy = evaluator.evaluate(prediction)
+
+
 
 println("accuracy = "+ accuracy)
 println("Test Error = " + (1.0 - accuracy))
