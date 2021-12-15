@@ -83,6 +83,16 @@ println("Accuracy: " + metrics.accuracy)
 println(s"Tst Error = ${(1.0 - metrics.accuracy)}")
 spark.stop()
 ```
+**RESULT**
+<br>
+This is a example to result and repet the process 30 times
+```spark
+Confusion matrix: 
+12039.0  22.0  
+1599.0   22.0 
+Accuracy: 0.8833238995004502
+Tst Error = 0.12047610058865769
+```
 
 **Results SVM**
 
@@ -144,6 +154,13 @@ predictions.select("predictedLabel", "label", "features").show(5)
 val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
 val accuracy = evaluator.evaluate(predictions)
 println(s"Test error = ${(1.0 - accuracy)}")
+```
+**RESULT**
+<br>
+This is a example to result and repet the process 30 times
+```spark
+Accuracy = 0.8907792083876189
+Test Error = 0.10933129159924048
 ```
 
 
